@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SandboxPage extends ConsumerWidget {
-  SandboxPage({super.key});
+  const SandboxPage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final double screenHeight = MediaQuery.of(context).size.height;
-    final double topPaneHeight = screenHeight * 0.4;
+    final double topPaneHeight = screenHeight * 0.6;
     return Scaffold(
       body: SafeArea(
         child: Column(

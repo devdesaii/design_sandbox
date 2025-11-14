@@ -8,6 +8,21 @@ class BottomPreview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       decoration: BoxDecoration(
+        boxShadow: (ref.watch(styleProvider).shadowEnabled
+            ? [
+                BoxShadow(
+                  color: ref
+                      .watch(styleProvider)
+                      .shadowColor
+                      .withOpacity(ref.watch(styleProvider).shadowOpacity),
+                  blurRadius: ref.watch(styleProvider).shadowBlur,
+                  offset: Offset(
+                    ref.watch(styleProvider).shadowOffsetX,
+                    ref.watch(styleProvider).shadowOffsetY,
+                  ),
+                ),
+              ]
+            : []),
         color: ref.watch(styleProvider).backgroundColor,
         border: Border.all(color: Colors.deepPurple),
         borderRadius: BorderRadius.all(

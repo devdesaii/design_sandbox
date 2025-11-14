@@ -1,4 +1,5 @@
 import 'package:design_sandbox/features/sandbox/providers/style_provider.dart';
+import 'package:design_sandbox/features/sandbox/widgets/shadow_controls.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,7 +40,7 @@ class TopControls extends ConsumerWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                final Color newColor = await showColorPickerDialog(
+                final Color? newColor = await showColorPickerDialog(
                   context,
                   currentColor.backgroundColor,
                   title: Text("Select a color"),
@@ -47,10 +48,13 @@ class TopControls extends ConsumerWidget {
                   colorCodeHasColor: true,
                   pickersEnabled: {ColorPickerType.wheel: true},
                 );
-                ref.read(styleProvider.notifier).updateColor(newColor);
+                if (newColor != null) {
+                  ref.read(styleProvider.notifier).updateColor(newColor);
+                }
               },
               child: Text("Pick a color"),
             ),
+            ShadowControls(),
           ],
         ),
       ),
