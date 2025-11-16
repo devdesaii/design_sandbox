@@ -1,3 +1,4 @@
+import 'package:design_sandbox/models/preset.dart';
 import 'package:design_sandbox/models/style_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
@@ -42,5 +43,9 @@ class StyleNotifier extends Notifier<StyleState> {
 
   void updateShadowColor(Color value) {
     state = state.copyWith(shadowColor: value);
+  }
+
+  void applyStyle(Preset preset) {
+    state = preset.style;
   }
 }

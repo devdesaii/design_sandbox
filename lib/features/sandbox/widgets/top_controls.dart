@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:design_sandbox/features/sandbox/providers/split_ratio_provider.dart';
 import 'package:design_sandbox/features/sandbox/providers/style_provider.dart';
+import 'package:design_sandbox/features/sandbox/widgets/presets_modal.dart';
 import 'package:design_sandbox/features/sandbox/widgets/shadow_controls.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +25,17 @@ class TopControls extends ConsumerWidget {
         child: Center(
           child: Column(
             children: [
+              TextButton(
+                onPressed: () async {
+                  return await showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return PresetsModal();
+                    },
+                  );
+                },
+                child: Text("Presets"),
+              ),
               Text("Current Color:"),
               SizedBox(
                 child: Container(
