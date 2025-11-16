@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:design_sandbox/features/sandbox/providers/split_ratio_provider.dart';
 import 'package:design_sandbox/features/sandbox/providers/style_provider.dart';
 import 'package:design_sandbox/features/sandbox/widgets/shadow_controls.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
@@ -18,44 +21,48 @@ class TopControls extends ConsumerWidget {
         color: Colors.grey,
         border: Border.all(color: Colors.white),
       ),
-      child: Center(
-        child: Column(
-          children: [
-            Text("Current Color:"),
-            SizedBox(
-              child: Container(
-                height: 30,
-                width: 30,
-                decoration: BoxDecoration(color: currentColor.backgroundColor),
+      child: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              Text("Current Color:"),
+              SizedBox(
+                child: Container(
+                  height: 30,
+                  width: 30,
+                  decoration: BoxDecoration(
+                    color: currentColor.backgroundColor,
+                  ),
+                ),
               ),
-            ),
-            Slider(
-              value: ref.watch(styleProvider).borderRadius,
-              min: 15,
-              max: 200,
-              label: "Border Radius",
-              onChanged: (value) {
-                ref.read(styleProvider.notifier).updateRadius(value);
-              },
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                final Color? newColor = await showColorPickerDialog(
-                  context,
-                  currentColor.backgroundColor,
-                  title: Text("Select a color"),
-                  enableShadesSelection: true,
-                  colorCodeHasColor: true,
-                  pickersEnabled: {ColorPickerType.wheel: true},
-                );
-                if (newColor != null) {
-                  ref.read(styleProvider.notifier).updateColor(newColor);
-                }
-              },
-              child: Text("Pick a color"),
-            ),
-            ShadowControls(),
-          ],
+              Slider(
+                value: ref.watch(styleProvider).borderRadius,
+                min: 15,
+                max: 200,
+                label: "Border Radius",
+                onChanged: (value) {
+                  ref.read(styleProvider.notifier).updateRadius(value);
+                },
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final Color? newColor = await showColorPickerDialog(
+                    context,
+                    currentColor.backgroundColor,
+                    title: Text("Select a color"),
+                    enableShadesSelection: true,
+                    colorCodeHasColor: true,
+                    pickersEnabled: {ColorPickerType.wheel: true},
+                  );
+                  if (newColor != null) {
+                    ref.read(styleProvider.notifier).updateColor(newColor);
+                  }
+                },
+                child: Text("Pick a color"),
+              ),
+              ShadowControls(),
+            ],
+          ),
         ),
       ),
     );

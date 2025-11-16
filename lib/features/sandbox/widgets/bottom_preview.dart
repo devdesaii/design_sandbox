@@ -6,7 +6,9 @@ class BottomPreview extends ConsumerWidget {
   const BottomPreview({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 1530),
+      curve: Curves.easeIn,
       decoration: BoxDecoration(
         boxShadow: (ref.watch(styleProvider).shadowEnabled
             ? [
