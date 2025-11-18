@@ -77,14 +77,14 @@ class Tokenizer {
       }
       stringValue += current;
       advance();
+      continue;
     }
     if (unterminated) {
       return Token(tokenType: TokenType.string, col: startCol, line: startLine)
         ..value = "\u0000";
-    }
-    else{
-    return Token(tokenType: TokenType.string, col: startCol, line: startLine)
-      ..value = stringValue;
+    } else {
+      return Token(tokenType: TokenType.string, col: startCol, line: startLine)
+        ..value = stringValue;
     }
   }
 
