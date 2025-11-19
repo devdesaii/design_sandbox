@@ -69,7 +69,7 @@ class Parser {
       }
       expect(TokenType.rparen);
     }
-
+    WidgetNode(name, properties: props).getValue();
     return WidgetNode(name, properties: props);
   }
 
@@ -83,6 +83,7 @@ class Parser {
     while (!isAtEnd && current.tokenType != TokenType.rbrace) {
       final keyToken = expect(TokenType.identifier);
       final key = keyToken.value ?? '';
+      print(key);
 
       expect(TokenType.colon);
 
@@ -122,9 +123,11 @@ class Parser {
       try {
         if ((raw).contains('.')) {
           final d = double.parse(raw);
+          LiteralNode(d).getValue();
           return LiteralNode(d);
         } else {
           final i = int.parse(raw);
+          LiteralNode(i).getValue();
           return LiteralNode(i);
         }
       } catch (e) {
@@ -141,6 +144,7 @@ class Parser {
           'ParserError: Unterminated string literal starting at ${tok.line}:${tok.col}',
         );
       }
+      LiteralNode(raw).getValue();
       return LiteralNode(raw);
     }
 
@@ -170,7 +174,7 @@ class Parser {
         'ParserError: Unexpected token ${current.tokenType} at ${current.line}:${current.col} after parsing complete widget',
       );
     }
-
+    root.getValue();
     return root;
   }
 }

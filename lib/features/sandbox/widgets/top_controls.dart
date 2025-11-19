@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:design_sandbox/features/editor/providers/console_text_provider.dart';
+import 'package:design_sandbox/features/editor/providers/editor_text_provider.dart';
 import 'package:design_sandbox/features/sandbox/providers/split_ratio_provider.dart';
 import 'package:design_sandbox/features/sandbox/providers/style_provider.dart';
 import 'package:design_sandbox/features/sandbox/widgets/presets_modal.dart';
@@ -14,6 +16,8 @@ class TopControls extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var currentColor = ref.watch(styleProvider);
     var safeHeight = height.clamp(120, double.infinity).toDouble();
+    var inputController = TextEditingController();
+    var editorText = inputController.text;
 
     return Container(
       height: safeHeight,
@@ -21,59 +25,19 @@ class TopControls extends ConsumerWidget {
         color: Colors.grey,
         border: Border.all(color: Colors.white),
       ),
-      child: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              TextButton(
-                onPressed: () async {
-                  return await showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return PresetsModal();
-                    },
-                  );
-                },
-                child: Text("Presets"),
-              ),
-              Text("Current Color:"),
-              SizedBox(
-                child: Container(
-                  height: 30,
-                  width: 30,
-                  decoration: BoxDecoration(
-                    color: currentColor.backgroundColor,
-                  ),
-                ),
-              ),
-              Slider(
-                value: ref.watch(styleProvider).borderRadius,
-                min: 15,
-                max: 200,
-                label: "Border Radius",
-                onChanged: (value) {
-                  ref.read(styleProvider.notifier).updateRadius(value);
-                },
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  final Color? newColor = await showColorPickerDialog(
-                    context,
-                    currentColor.backgroundColor,
-                    title: Text("Select a color"),
-                    enableShadesSelection: true,
-                    colorCodeHasColor: true,
-                    pickersEnabled: {ColorPickerType.wheel: true},
-                  );
-                  if (newColor != null) {
-                    ref.read(styleProvider.notifier).updateColor(newColor);
-                  }
-                },
-                child: Text("Pick a color"),
-              ),
-              ShadowControls(),
-            ],
-          ),
+      child: Center(
+        child: Column(
+          children: [
+            TextField(
+              controller: inputController,
+              decoration: InputDecoration(labelText: "Input Code"),
+              onChanged: (value) {
+                editorText = value;
+                ref.read(editorTextProvider.notifier).update(editorText);
+              },
+            ),
+            Text(ref.watch(consoleTextProvider).join("\n")),
+          ],
         ),
       ),
     );
