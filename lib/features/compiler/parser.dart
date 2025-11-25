@@ -1,5 +1,5 @@
-import 'package:design_sandbox/features/parser/ast.dart';
-import 'package:design_sandbox/features/tokenizer.dart';
+import 'package:design_sandbox/features/compiler/ast.dart';
+import 'package:design_sandbox/features/compiler/tokenizer.dart';
 
 class Parser {
   Parser(this.tokens);

@@ -1,4 +1,4 @@
-import 'package:design_sandbox/features/editor/providers/editor_text_provider.dart';
+import 'package:design_sandbox/features/compiler_providers/editor_text_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 

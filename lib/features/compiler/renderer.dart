@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:design_sandbox/features/parser/parser.dart';
-import 'package:design_sandbox/features/parser/ast.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:design_sandbox/features/compiler/ast.dart';
 
 class Renderer {
   Renderer(this.nodeTree);
@@ -39,6 +37,8 @@ class Renderer {
           return Colors.green;
         case 'blue':
           return Colors.blue;
+        case 'black':
+          return Colors.black;
       }
     }
     if (node is WidgetNode) {
@@ -50,38 +50,52 @@ class Renderer {
           return Colors.green;
         case 'blue':
           return Colors.blue;
+        case 'black':
+          return Colors.black;
       }
     }
     return Colors.blue;
   }
 
   Widget buildWidget(WidgetNode node) {
+    final props = node.properties;
     switch (node.name) {
       case 'Container':
+        if (props == null) {
+          return Container();
+        }
+
+        const allowedKeys = {'color', 'width', 'height', 'padding', 'child'};
+
+        final unknownKeys = props.keys
+            .where((k) => !allowedKeys.contains(k))
+            .toList();
+        if (unknownKeys.isNotEmpty) {
+          throw Exception(
+            'Unknown property "${unknownKeys.first}" for Container',
+          );
+        }
+
         return Container(
-          color:
-              node.properties != null && node.properties!.containsKey('color')
-              ? extractColor(node.properties!['color']!)
+          color: props.containsKey('color')
+              ? extractColor(props['color']!)
               : Colors.transparent,
-          width:
-              node.properties != null && node.properties!.containsKey('width')
-              ? buildDouble(node.properties!['width']!)
+          width: props.containsKey('width')
+              ? buildDouble(props['width']!)
               : null,
-          height:
-              node.properties != null && node.properties!.containsKey('height')
-              ? buildDouble(node.properties!['height']!)
+          height: node.properties!.containsKey('height')
+              ? buildDouble(props['height']!)
               : null,
           padding:
               node.properties != null && node.properties!.containsKey('padding')
               ? EdgeInsets.all(buildDouble(node.properties!['padding']!) ?? 0.0)
               : null,
-          child:
-              node.properties != null && node.properties!.containsKey('child')
-              ? astNodeToWidget(node.properties!['child']!)
+          child: props.containsKey('child')
+              ? astNodeToWidget(props['child']!)
               : null,
         );
       case 'Text':
-        final text = node.properties?['value'];
+        final text = props?['value'];
         final textValue = text != null ? buildLiteral(text) : '';
         return Center(
           child: Text(
