@@ -1,3 +1,4 @@
+import 'package:design_sandbox/features/compiler/normalizer.dart';
 import 'package:design_sandbox/features/compiler_providers/debounce_text_provider.dart';
 import 'package:design_sandbox/features/compiler/parser.dart';
 import 'package:design_sandbox/features/compiler/renderer.dart';
@@ -15,6 +16,7 @@ class RenderedOutputNotifier extends Notifier<Widget> {
   build() {
     try {
       var tokenizerSource = ref.watch(debounceTextProvider);
+      tokenizerSource = normalizeInput(tokenizerSource);
       final tokenizerInstance = Tokenizer(tokenizerSource);
       var parserInput = tokenizerInstance.tokenize();
       final parserInstance = Parser(parserInput);
